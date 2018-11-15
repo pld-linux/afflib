@@ -5,6 +5,7 @@
 %bcond_without	fuse		# without FUSE support
 %bcond_without	python		# without Python support
 %bcond_without	system_lzma	# disable building against system lzma, prefer local copy
+%bcond_without	static_libs	# don't build static libraries
 %bcond_without	s3		# without Amazon S3
 %bcond_without	qemu		# without QEMU support
 #
@@ -64,6 +65,28 @@ Requires:	pkgconfig
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package static
+Summary:	Static %{name} library
+Summary(pl.UTF-8):	Statyczna biblioteka %{name}
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static %{name} library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka %{name}.
+
+%package python
+Summary:	Python bindings for AFFLIB
+Group:		Libraries/Python
+Requires:	%{name} = %{version}-%{release}
+
+%description python
+These bindings currently support a read-only file-like interface to
+AFFLIB and basic metadata accessor functions. The binding is not
+currently complete.
+
 %prep:
 %setup -q -n AFFLIBv3-%{version}
 %patch0 -p1
@@ -95,6 +118,11 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%if %{with python}
+%py_postclean
+rm -rf $RPM_BUILD_ROOT%{py_sitedir}/*.egg-info/
+%endif
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -118,3 +146,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/*.so
 %{_libdir}/*.la
 %{_pkgconfigdir}/afflib.pc
+
+%if %{with static_libs}
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libafflib.a
+%endif
+
+%files python
+%defattr(644,root,root,755)
+%doc pyaff/README
+%attr(755,root,root) %{py_sitedir}/pyaff.so
