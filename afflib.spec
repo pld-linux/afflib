@@ -12,12 +12,12 @@
 #
 Summary:	Library to support the Advanced Forensic Format
 Name:		afflib
-Version:	3.7.16
-Release:	0.1
+Version:	3.7.17
+Release:	1
 License:	BSD with advertising
 Group:		Libraries
 Source0:	https://github.com/sshock/AFFLIBv3/archive/v%{version}.tar.gz
-# Source0-md5:	776f09e1c98a63e1e7a16a52f56146fe
+# Source0-md5:	dbc856c84df06d3a5ea74b98f1b1a40b
 Patch0:		Sanity-check-size-passed-to-malloc.patch
 URL:		https://github.com/sshock/AFFLIBv3
 BuildRequires:	autoconf
