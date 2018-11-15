@@ -132,7 +132,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS BUGLIST.txt ChangeLog NEWS README doc/announce_2.2.txt COPYING
-%attr(755,root,root) %{_libdir}/*.so.*
+%attr(755,root,root) %{_libdir}/libafflib.so.*
 
 %files -n afftools
 %defattr(644,root,root,755)
@@ -142,9 +142,9 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %doc doc/crypto_design.txt doc/crypto_doc.txt
-%{_includedir}/afflib/
-%{_libdir}/*.so
+%attr(755,root,root) %{_libdir}/libafflib.so
 %{_libdir}/*.la
+%{_includedir}/afflib/
 %{_pkgconfigdir}/afflib.pc
 
 %if %{with static_libs}
