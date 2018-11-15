@@ -1,0 +1,18 @@
+--- AFFLIBv3-3.7.17/configure.ac~	2018-09-09 19:44:29.000000000 +0200
++++ AFFLIBv3-3.7.17/configure.ac	2018-11-15 08:01:41.847431009 +0100
+@@ -37,9 +37,13 @@
+     AC_MSG_NOTICE([checking ${spfx}/include])
+     if test -d ${spfx}/include; then
+         CPPFLAGS="$CPPFLAGS -I${spfx}/include"
+-        LDFLAGS="$LDFLAGS -L${spfx}/lib"
+         AC_MSG_NOTICE([ *** ADDING ${spfx}/include to CPPFLAGS *** ])
+-        AC_MSG_NOTICE([ *** ADDING ${spfx}/lib to LDFLAGS *** ])
++	for lib in libx32 lib64 lib; do
++		if test -d ${spfx}/${lib}; then
++		        LDFLAGS="$LDFLAGS -L${spfx}/${lib}"
++		        AC_MSG_NOTICE([ *** ADDING ${spfx}/${lib} to LDFLAGS *** ])
++		fi
++	done
+     fi
+   done
+   AC_MSG_NOTICE([ CPPFLAGS = ${CPPFLAGS} ])
