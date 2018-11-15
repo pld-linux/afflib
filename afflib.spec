@@ -1,6 +1,12 @@
 # TODO:
-# - python, amazon s3, lzma, fuse, qemu bconds
 # - build against system lzma if possible
+#
+# Conditional build:
+%bcond_without	fuse		# without FUSE support
+%bcond_without	python		# without Python support
+%bcond_without	system_lzma	# disable building against system lzma, prefer local copy
+%bcond_without	s3		# without Amazon S3
+%bcond_without	qemu		# without QEMU support
 #
 Summary:	Library to support the Advanced Forensic Format
 Name:		afflib
@@ -14,15 +20,25 @@ Patch0:		Sanity-check-size-passed-to-malloc.patch
 URL:		https://github.com/sshock/AFFLIBv3
 BuildRequires:	autoconf
 BuildRequires:	automake
+%if %{with s3}
 BuildRequires:	curl-devel
 BuildRequires:	expat-devel
+%endif
 BuildRequires:	intltool
+%if %{with fuse}
+BuildRequires:	libfuse3-devel
+%endif
+BuildRequires:	libmd-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
+%if %{with system_lzma}
 BuildRequires:	lzma-devel
+%endif
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
 BuildRequires:	python-devel
+BuildRequires:	readline-devel
+BuildRequires:	rpmbuild(macros) >= 1.527
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -52,11 +68,13 @@ developing applications that use %{name}.
 %setup -q -n AFFLIBv3-%{version}
 %patch0 -p1
 
-# prevent internal lzma to be built - testing
-#rm -rf lzma443
-
-#fix spurious permissions with lzma443
-find lzma443 -type f -exec chmod 0644 {} ';'
+%if %{with system_lzma}
+	# prevent internal lzma to be built - testing
+	#rm -rf lzma443
+%else
+	#fix spurious permissions with lzma443
+	find lzma443 -type f -exec chmod 0644 {} ';'
+%endif
 
 %build
 %{__libtoolize}
@@ -64,7 +82,11 @@ find lzma443 -type f -exec chmod 0644 {} ';'
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-%configure
+%configure \
+	%{__enable_disable fuse} \
+	%{__enable_disable python} \
+	%{__enable_disable s3} \
+	%{__enable_disable qemu}
 
 %{__make}
 
