@@ -1,5 +1,6 @@
 # TODO:
 # - build against system lzma if possible
+# - some bundled qemu source?
 #
 # Conditional build:
 %bcond_without	fuse		# without FUSE support
