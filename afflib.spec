@@ -5,7 +5,7 @@
 # Conditional build:
 %bcond_without	fuse		# without FUSE support
 %bcond_without	python		# without Python support
-%bcond_without	system_lzma	# disable building against system lzma, prefer local copy
+%bcond_with	system_lzma	# building against system lzma instead of local copy
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	s3		# without Amazon S3
 %bcond_without	qemu		# without QEMU support
@@ -13,7 +13,7 @@
 Summary:	Library to support the Advanced Forensic Format
 Name:		afflib
 Version:	3.7.17
-Release:	1
+Release:	2
 License:	BSD with advertising
 Group:		Libraries
 Source0:	https://github.com/sshock/AFFLIBv3/archive/v%{version}.tar.gz
