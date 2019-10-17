@@ -13,7 +13,7 @@
 Summary:	Library to support the Advanced Forensic Format
 Name:		afflib
 Version:	3.7.18
-Release:	1
+Release:	2
 License:	BSD with advertising
 Group:		Libraries
 Source0:	https://github.com/sshock/AFFLIBv3/archive/v%{version}.tar.gz
