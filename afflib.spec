@@ -13,7 +13,7 @@
 Summary:	Library to support the Advanced Forensic Format
 Name:		afflib
 Version:	3.7.18
-Release:	2
+Release:	3
 License:	BSD with advertising
 Group:		Libraries
 Source0:	https://github.com/sshock/AFFLIBv3/archive/v%{version}.tar.gz
@@ -60,6 +60,7 @@ The %{name}-utils package contains utilities for using %{name}.
 %package        devel
 Summary:	Development files for %{name}
 Requires:	%{name} = %{version}-%{release}
+Requires:	libmd-devel
 Requires:	openssl-devel
 Requires:	pkgconfig
 
@@ -126,6 +127,8 @@ rm -rf $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT%{py_sitedir}/*.egg-info/
 %endif
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -135,7 +138,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS BUGLIST.txt ChangeLog NEWS README doc/announce_2.2.txt COPYING
-%attr(755,root,root) %{_libdir}/libafflib.so.*
+%attr(755,root,root) %{_libdir}/libafflib.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libafflib.so.0
 
 %files -n afftools
 %defattr(644,root,root,755)
@@ -146,7 +150,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc doc/crypto_design.txt doc/crypto_doc.txt
 %attr(755,root,root) %{_libdir}/libafflib.so
-%{_libdir}/*.la
 %{_includedir}/afflib/
 %{_pkgconfigdir}/afflib.pc
 
