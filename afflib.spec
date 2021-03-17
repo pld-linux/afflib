@@ -20,7 +20,6 @@ Group:		Libraries
 #Source0Download: https://github.com/sshock/AFFLIBv3/releases/
 Source0:	https://github.com/sshock/AFFLIBv3/archive/v%{version}/AFFLIBv3-%{version}.tar.gz
 # Source0-md5:	83b2b89e23090930905547e7e47f9e09
-Patch0:		Sanity-check-size-passed-to-malloc.patch
 Patch1:		%{name}-x32-x64.patch
 URL:		https://github.com/sshock/AFFLIBv3
 BuildRequires:	autoconf >= 2.50
@@ -115,7 +114,6 @@ metadanych. Wiązania nie są jeszcze kompletne.
 
 %prep:
 %setup -q -n AFFLIBv3-%{version}
-%patch0 -p1
 %patch1 -p1
 
 %if %{with system_lzma}
