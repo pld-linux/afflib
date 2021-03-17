@@ -3,29 +3,31 @@
 # - some bundled qemu source?
 #
 # Conditional build:
-%bcond_without	fuse		# without FUSE support
-%bcond_without	python		# without Python support
+%bcond_without	fuse		# FUSE support
+%bcond_without	python		# Python support
 %bcond_with	system_lzma	# building against system lzma instead of local copy
-%bcond_without	static_libs	# don't build static libraries
-%bcond_without	s3		# without Amazon S3
-%bcond_without	qemu		# without QEMU support
+%bcond_without	static_libs	# static library
+%bcond_without	s3		# Amazon S3 support
+%bcond_without	qemu		# QEMU support
 #
 Summary:	Library to support the Advanced Forensic Format
+Summary(pl.UTF-8):	Biblioteka do obsługi firmatu plików AFF (Advanced Forensic Format)
 Name:		afflib
-Version:	3.7.18
-Release:	3
+Version:	3.7.19
+Release:	1
 License:	BSD with advertising
 Group:		Libraries
-Source0:	https://github.com/sshock/AFFLIBv3/archive/v%{version}.tar.gz
-# Source0-md5:	079f7ff418a853d5e7462d09113bbe2f
+#Source0Download: https://github.com/sshock/AFFLIBv3/releases/
+Source0:	https://github.com/sshock/AFFLIBv3/archive/v%{version}/AFFLIBv3-%{version}.tar.gz
+# Source0-md5:	83b2b89e23090930905547e7e47f9e09
 Patch0:		Sanity-check-size-passed-to-malloc.patch
 Patch1:		%{name}-x32-x64.patch
 URL:		https://github.com/sshock/AFFLIBv3
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 %if %{with s3}
 BuildRequires:	curl-devel
-BuildRequires:	expat-devel
+BuildRequires:	expat-devel >= 1.95
 %endif
 BuildRequires:	intltool
 %if %{with fuse}
@@ -39,49 +41,65 @@ BuildRequires:	lzma-devel
 %endif
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
-BuildRequires:	python-devel
+%{?with_python:BuildRequires:	python-devel >= 2}
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.527
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-AFF® is an open and extensible file format designed to store disk
+AFF(R) is an open and extensible file format designed to store disk
 images and associated metadata. afflib is library for support of the
 Advanced Forensic Format (AFF).
 
-%package -n     afftools
-Summary:	Utilities for %{name}
+%description -l pl.UTF-8
+AFF(R) to otwarty i rozszerzalny format pliku zaprojektowany do zapisu
+obrazów dysków i powiązanych metadanych. afflib to biblioteka do
+obsługi formatu AFF (Advanced Forensic Format).
+
+%package -n afftools
+Summary:	Utilities for AFFLIB library
+Summary(pl.UTF-8):	Narzędzia do biblioteki AFFLIB
+Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 
 %description -n afftools
-The %{name}-utils package contains utilities for using %{name}.
+This package contains utilities for using AFFLIB library.
 
-%package        devel
-Summary:	Development files for %{name}
+%description -n afftools -l pl.UTF-8
+Ten pakiet zawiera narzędzia korzystające z biblioteki AFFLIB.
+
+%package devel
+Summary:	Development files for AFFLIB
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki AFFLIB
+Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libmd-devel
 Requires:	openssl-devel
-Requires:	pkgconfig
 
-%description    devel
-The %{name}-devel package contains libraries and header files for
-developing applications that use %{name}.
+%description devel
+This package contains the header files for developing applications
+that use AFFLIB library.
+
+%description devel -l pl.UTF-8
+Ten pakiet zawiera pliki nagłówkowe do tworzenia aplikacji
+wykorzystujących bibliotekę AFFLIB.
 
 %package static
-Summary:	Static %{name} library
-Summary(pl.UTF-8):	Statyczna biblioteka %{name}
+Summary:	Static AFFLIB library
+Summary(pl.UTF-8):	Statyczna biblioteka AFFLIB
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
-Static %{name} library.
+Static AFFLIB library.
 
 %description static -l pl.UTF-8
-Statyczna biblioteka %{name}.
+Statyczna biblioteka AFFLIB.
 
 %package python
 Summary:	Python bindings for AFFLIB
+Summary(pl.UTF-8):	Wiązania Pythona do biblioteki AFFLIB
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
 
@@ -89,6 +107,11 @@ Requires:	%{name} = %{version}-%{release}
 These bindings currently support a read-only file-like interface to
 AFFLIB and basic metadata accessor functions. The binding is not
 currently complete.
+
+%description python -l pl.UTF-8
+Te wiązania obecnie obsługują zbliżony do plików interfejs tylko do
+odczytu do biblioteki AFFLIB oraz podstawowe funkcje dostępu do
+metadanych. Wiązania nie są jeszcze kompletne.
 
 %prep:
 %setup -q -n AFFLIBv3-%{version}
@@ -105,7 +128,7 @@ currently complete.
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -119,15 +142,15 @@ currently complete.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+
 %if %{with python}
 %py_postclean
-rm -rf $RPM_BUILD_ROOT%{py_sitedir}/*.egg-info/
 %endif
-
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -137,7 +160,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS BUGLIST.txt ChangeLog NEWS README doc/announce_2.2.txt COPYING
+%doc AUTHORS BUGLIST.txt COPYING ChangeLog NEWS README doc/announce_2.2.txt
 %attr(755,root,root) %{_libdir}/libafflib.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libafflib.so.0
 
@@ -150,7 +173,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc doc/crypto_design.txt doc/crypto_doc.txt
 %attr(755,root,root) %{_libdir}/libafflib.so
-%{_includedir}/afflib/
+%{_includedir}/afflib
 %{_pkgconfigdir}/afflib.pc
 
 %if %{with static_libs}
@@ -159,7 +182,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libafflib.a
 %endif
 
+%if %{with python}
 %files python
 %defattr(644,root,root,755)
 %doc pyaff/README
 %attr(755,root,root) %{py_sitedir}/pyaff.so
+%{py_sitedir}/PyAFF-0.1-py*.egg-info
+%endif
