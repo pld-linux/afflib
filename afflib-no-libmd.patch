@@ -1,0 +1,11 @@
+--- AFFLIBv3-3.7.19/configure.ac.orig	2021-04-26 21:39:18.218328511 +0200
++++ AFFLIBv3-3.7.19/configure.ac	2021-04-26 21:44:33.326621423 +0200
+@@ -225,8 +225,6 @@
+ AC_CHECK_LIB([crypto],[EVP_get_digestbyname],,
+ 	AC_MSG_ERROR([OpenSSL developer library 'libssl-dev' or 'openssl-devel' not installed; cannot continue.]))
+ 
+-AC_CHECK_LIB([md],[MD5])		# if libmd is available, get it
+-
+ AC_CHECK_FUNCS([MD5 SHA1 AES_encrypt RAND_bytes des_read_pw_string EVP_read_pw_string EVP_MD_size])
+ AC_CHECK_FUNCS([PEM_read_bio_RSA_PUBKEY])
+ 
