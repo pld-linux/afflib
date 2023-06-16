@@ -39,6 +39,7 @@ BuildRequires:	lzma-devel
 %endif
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
+%{?with_python:BuildRequires:	python-Cython}
 %{?with_python:BuildRequires:	python-devel >= 2}
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.527
