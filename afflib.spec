@@ -14,7 +14,7 @@ Summary:	Library to support the Advanced Forensic Format
 Summary(pl.UTF-8):	Biblioteka do obsługi firmatu plików AFF (Advanced Forensic Format)
 Name:		afflib
 Version:	3.7.20
-Release:	1
+Release:	2
 License:	BSD with advertising
 Group:		Libraries
 #Source0Download: https://github.com/sshock/AFFLIBv3/releases/
@@ -39,8 +39,8 @@ BuildRequires:	lzma-devel
 %endif
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
-%{?with_python:BuildRequires:	python-Cython}
-%{?with_python:BuildRequires:	python-devel >= 2}
+%{?with_python:BuildRequires:	python3-Cython}
+%{?with_python:BuildRequires:	python3-devel >= 1:3.3}
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.527
 BuildRequires:	zlib-devel
@@ -95,18 +95,19 @@ Static AFFLIB library.
 %description static -l pl.UTF-8
 Statyczna biblioteka AFFLIB.
 
-%package python
+%package -n python3-afflib
 Summary:	Python bindings for AFFLIB
 Summary(pl.UTF-8):	Wiązania Pythona do biblioteki AFFLIB
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	afflib-python < 3.7.20-2
 
-%description python
+%description -n python3-afflib
 These bindings currently support a read-only file-like interface to
 AFFLIB and basic metadata accessor functions. The binding is not
 currently complete.
 
-%description python -l pl.UTF-8
+%description -n python3-afflib -l pl.UTF-8
 Te wiązania obecnie obsługują zbliżony do plików interfejs tylko do
 odczytu do biblioteki AFFLIB oraz podstawowe funkcje dostępu do
 metadanych. Wiązania nie są jeszcze kompletne.
@@ -131,6 +132,7 @@ metadanych. Wiązania nie są jeszcze kompletne.
 %{__autoheader}
 %{__automake}
 %configure \
+	PYTHON=%{__python3} \
 	%{__enable_disable fuse} \
 	%{__enable_disable python} \
 	%{__enable_disable s3} \
@@ -181,9 +183,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %if %{with python}
-%files python
+%files -n python3-afflib
 %defattr(644,root,root,755)
 %doc pyaff/README
-%attr(755,root,root) %{py_sitedir}/pyaff.so
-%{py_sitedir}/PyAFF-0.1-py*.egg-info
+%attr(755,root,root) %{py3_sitedir}/pyaff.*.so
+%{py3_sitedir}/PyAFF-0.1-py*.egg-info
 %endif
