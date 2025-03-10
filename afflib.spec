@@ -14,7 +14,7 @@ Summary:	Library to support the Advanced Forensic Format
 Summary(pl.UTF-8):	Biblioteka do obsługi firmatu plików AFF (Advanced Forensic Format)
 Name:		afflib
 Version:	3.7.20
-Release:	2
+Release:	3
 License:	BSD with advertising
 Group:		Libraries
 #Source0Download: https://github.com/sshock/AFFLIBv3/releases/
