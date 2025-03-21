@@ -112,10 +112,10 @@ Te wiązania obecnie obsługują zbliżony do plików interfejs tylko do
 odczytu do biblioteki AFFLIB oraz podstawowe funkcje dostępu do
 metadanych. Wiązania nie są jeszcze kompletne.
 
-%prep:
+%prep
 %setup -q -n AFFLIBv3-%{version}
-%patch0 -p1
-%patch1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
 
 %if %{with system_lzma}
 	# prevent internal lzma to be built - testing
