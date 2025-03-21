@@ -1,0 +1,11 @@
+--- AFFLIBv3-3.7.20/pyaff/afflib.pxd.orig	2022-12-28 05:45:13.000000000 +0100
++++ AFFLIBv3-3.7.20/pyaff/afflib.pxd	2025-03-21 21:45:10.413710846 +0100
+@@ -2,7 +2,7 @@ from libc.stdint cimport int64_t, uint32
+ from posix.fcntl cimport O_RDONLY
+ 
+ cdef extern from "afflib/afflib.h":
+-    struct AFFILE
++    ctypedef struct AFFILE
+ 
+     enum: AF_MAX_NAME_LEN
+ 

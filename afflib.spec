@@ -14,7 +14,7 @@ Summary:	Library to support the Advanced Forensic Format
 Summary(pl.UTF-8):	Biblioteka do obsługi firmatu plików AFF (Advanced Forensic Format)
 Name:		afflib
 Version:	3.7.20
-Release:	4
+Release:	5
 License:	BSD with advertising
 Group:		Libraries
 #Source0Download: https://github.com/sshock/AFFLIBv3/releases/
@@ -22,6 +22,7 @@ Source0:	https://github.com/sshock/AFFLIBv3/archive/v%{version}/AFFLIBv3-%{versi
 # Source0-md5:	4e8e82bafa74c076fc5b2f73e582da7e
 Patch0:		%{name}-no-libmd.patch
 Patch1:		%{name}-x32-x64.patch
+Patch2:		%{name}-cython.patch
 URL:		https://github.com/sshock/AFFLIBv3
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
@@ -116,6 +117,7 @@ metadanych. Wiązania nie są jeszcze kompletne.
 %setup -q -n AFFLIBv3-%{version}
 %patch -P0 -p1
 %patch -P1 -p1
+%patch -P2 -p1
 
 %if %{with system_lzma}
 	# prevent internal lzma to be built - testing
